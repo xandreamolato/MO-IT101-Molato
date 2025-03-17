@@ -1,0 +1,14 @@
+package motorph.payroll;
+
+public class MainApp {
+    public static void main(String[] args) {
+        PayrollManager payrollManager = new PayrollManager();
+        
+        // Load employee data from CSV (Change file path if needed)
+        String filePath = "src/MotorPHEmployeeData.csv"; 
+        payrollManager.loadEmployeesFromCSV(filePath);
+        
+        // Display payroll
+        payrollManager.displayPayroll();
+    }
+}
