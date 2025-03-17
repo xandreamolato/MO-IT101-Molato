@@ -1,0 +1,29 @@
+package motorph.management;
+
+public class MainApp {
+    public static void main(String[] args) {
+        InventoryManager manager = new InventoryManager();
+
+        // Add sample items
+        manager.addItem(new InventoryItem("101", "Motor Oil", 50, 120.0));
+        manager.addItem(new InventoryItem("102", "Brake Fluid", 30, 250.0));
+        manager.addItem(new InventoryItem("103", "Tires", 10, 5000.0));
+
+        System.out.println("Initial Inventory:");
+        manager.displayInventory();
+
+        // Sort and display sorted inventory
+        manager.sortItemsByName();
+        System.out.println("\nSorted Inventory:");
+        manager.displayInventory();
+
+        // Search for an item
+        InventoryItem foundItem = manager.searchItem("Brake Fluid");
+        System.out.println("\nSearch Result: " + (foundItem != null ? foundItem : "Not Found"));
+
+        // Delete an item
+        manager.deleteItem("102");
+        System.out.println("\nInventory after deletion:");
+        manager.displayInventory();
+    }
+}
