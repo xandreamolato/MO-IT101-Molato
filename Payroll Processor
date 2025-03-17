@@ -1,0 +1,79 @@
+package motorph.payroll;
+
+import java.io.*;
+
+public class PayrollProcessor {
+    public static void main(String[] args) {
+        // Define file path
+        String filePath = "employee_data.txt";
+        
+        // Variables for employee details
+        String employeeName = "";
+        double grossWage = 0;
+
+        // Read file and parse input
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("Employee Name:")) {
+                    employeeName = line.split(":")[1].trim();
+                } else if (line.startsWith("Gross Wage:")) {
+                    grossWage = Double.parseDouble(line.split(":")[1].trim());
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file: " + e.getMessage());
+            return;
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid gross wage format in file.");
+            return;
+        }
+
+        // Compute deductions and net salary
+        double sss = computeSSS(grossWage);
+        double philHealth = computePhilHealth(grossWage);
+        double pagIbig = computePagIbig(grossWage);
+        double taxableIncome = grossWage - (sss + philHealth + pagIbig);
+        double withholdingTax = computeWithholdingTax(taxableIncome);
+        double netWage = grossWage - (sss + philHealth + pagIbig + withholdingTax);
+
+        // Display results
+        System.out.println("Employee Name: " + employeeName);
+        System.out.println("Gross Wage: " + grossWage);
+        System.out.println("SSS Contribution: " + sss);
+        System.out.println("PhilHealth Contribution: " + philHealth);
+        System.out.println("Pag-ibig Contribution: " + pagIbig);
+        System.out.println("Taxable Income: " + taxableIncome);
+        System.out.println("Withholding Tax: " + withholdingTax);
+        System.out.println("Net Wage: " + netWage);
+    }
+
+    // Compute SSS based on the given contribution table
+    public static double computeSSS(double salary) {
+        if (salary < 3250) return 135;
+        else if (salary >= 24750) return 1125;
+        else return ((int) ((salary - 3250) / 500)) * 22.5 + 157.5;
+    }
+
+    // Compute PhilHealth based on 3% rate
+    public static double computePhilHealth(double salary) {
+        if (salary <= 10000) return 300 / 2;
+        else if (salary >= 60000) return 1800 / 2;
+        else return (salary * 0.03) / 2;
+    }
+
+    // Compute Pag-ibig Contribution
+    public static double computePagIbig(double salary) {
+        return (salary > 1500) ? salary * 0.02 : salary * 0.01;
+    }
+
+    // Compute Withholding Tax based on tax brackets
+    public static double computeWithholdingTax(double taxableIncome) {
+        if (taxableIncome <= 20832) return 0;
+        else if (taxableIncome <= 33333) return (taxableIncome - 20833) * 0.20;
+        else if (taxableIncome <= 66667) return 2500 + (taxableIncome - 33333) * 0.25;
+        else if (taxableIncome <= 166667) return 10833 + (taxableIncome - 66667) * 0.30;
+        else if (taxableIncome <= 666667) return 40833.33 + (taxableIncome - 166667) * 0.32;
+        else return 200833.33 + (taxableIncome - 666667) * 0.35;
+    }
+}
