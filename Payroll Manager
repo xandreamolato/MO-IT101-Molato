@@ -1,0 +1,42 @@
+package motorph.payroll;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class PayrollManager {
+    private List<Employee> employees;
+
+    // Constructor
+    public PayrollManager() {
+        this.employees = new ArrayList<>();
+    }
+
+    // Load employee data from CSV
+    public void loadEmployeesFromCSV(String filePath) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            br.readLine(); // Skip header
+            while ((line = br.readLine()) != null) {
+                String[] details = line.split(",");
+                if (details.length >= 3) {
+                    String id = details[0].trim();
+                    String name = details[1].trim();
+                    double salary = Double.parseDouble(details[2].trim());
+                    employees.add(new Employee(id, name, salary));
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error loading CSV: " + e.getMessage());
+        }
+    }
+
+    // Display Payroll for all employees
+    public void displayPayroll() {
+        for (Employee emp : employees) {
+            emp.displayPayroll();
+        }
+    }
+}
