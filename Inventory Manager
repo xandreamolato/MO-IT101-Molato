@@ -1,0 +1,39 @@
+package motorph.management;
+
+import java.util.*;
+
+public class InventoryManager {
+    private List<InventoryItem> inventory = new ArrayList<>();
+
+    // Add a new item
+    public void addItem(InventoryItem item) {
+        inventory.add(item);
+    }
+
+    // Delete an item by ID
+    public void deleteItem(String itemId) {
+        inventory.removeIf(item -> item.getItemId().equals(itemId));
+    }
+
+    // Sort items by name
+    public void sortItemsByName() {
+        inventory.sort(Comparator.comparing(InventoryItem::getItemName));
+    }
+
+    // Search for an item by name
+    public InventoryItem searchItem(String itemName) {
+        for (InventoryItem item : inventory) {
+            if (item.getItemName().equalsIgnoreCase(itemName)) {
+                return item;
+            }
+        }
+        return null; // Not found
+    }
+
+    // Display all inventory items
+    public void displayInventory() {
+        for (InventoryItem item : inventory) {
+            System.out.println(item);
+        }
+    }
+}
