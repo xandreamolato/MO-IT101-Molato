@@ -1,0 +1,52 @@
+package motorph.payroll;
+
+public class Employee {
+    private String id;
+    private String name;
+    private double grossSalary;
+
+    // Constructor
+    public Employee(String id, String name, double grossSalary) {
+        this.id = id;
+        this.name = name;
+        this.grossSalary = grossSalary;
+    }
+
+    // Government Deductions
+    public double calculateSSS() {
+        return grossSalary * 0.045; // 4.5% SSS deduction
+    }
+
+    public double calculatePagIbig() {
+        return grossSalary * 0.02; // 2% Pag-IBIG deduction
+    }
+
+    public double calculatePhilHealth() {
+        return grossSalary * 0.035; // 3.5% PhilHealth deduction
+    }
+
+    public double calculateIncomeTax() {
+        if (grossSalary <= 25000) {
+            return 0; // No income tax for salary <= 25k
+        } else if (grossSalary <= 50000) {
+            return grossSalary * 0.15; // 15% tax for 25k-50k
+        } else {
+            return grossSalary * 0.25; // 25% tax for >50k
+        }
+    }
+
+    // Compute Net Salary
+    public double computeNetSalary() {
+        return grossSalary - (calculateSSS() + calculatePagIbig() + calculatePhilHealth() + calculateIncomeTax());
+    }
+
+    // Display Employee Payroll Info
+    public void displayPayroll() {
+        System.out.println("ID: " + id + ", Name: " + name);
+        System.out.printf("Gross Salary: PHP %.2f%n", grossSalary);
+        System.out.printf("SSS: PHP %.2f, Pag-IBIG: PHP %.2f, PhilHealth: PHP %.2f, Income Tax: PHP %.2f%n",
+                calculateSSS(), calculatePagIbig(), calculatePhilHealth(), calculateIncomeTax());
+        System.out.printf("Net Salary: PHP %.2f%n", computeNetSalary());
+        System.out.println("--------------------------------------");
+    }
+}
